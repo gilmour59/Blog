@@ -21,15 +21,15 @@
                 @csrf
                 <div class="form-group">
                     <label for="title">Title</label>
-                    <input type="text" class="form-control" name="title">
+                    <input type="text" class="form-control" name="title" value="{{ old('title') }}">
                 </div>
                 <div class="form-group">
                     <label for="featured">Featured Image</label>
                     <input type="file" class="form-control" name="featured">
                 </div>
                 <div class="form-group">
-                    <label for="content">Featured Image</label>
-                    <textarea name="content" id="content" cols="5" rows="5" class="form-control"></textarea>
+                    <label for="content">Content</label>
+                    <textarea name="content" id="content" cols="5" rows="5" class="form-control">{{ old('content') }}</textarea>
                 </div>
                 <div class="form-group">
                     <div class="text-center">
