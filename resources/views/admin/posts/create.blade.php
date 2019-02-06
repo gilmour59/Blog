@@ -1,23 +1,12 @@
 @extends('layouts.app')
-
 @section('content')
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="list-group">
-                @foreach ($errors->all() as $error)
-                    <li class="list-group-item text-danger">{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
+@include('admin.includes.errors')
     <div class="card">
         <div class="card-header">
             Create Post
         </div>
         <div class="card-body">
-            <form action="{{route('post.store')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('post.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label for="title">Title</label>

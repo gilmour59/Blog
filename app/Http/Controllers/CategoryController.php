@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Post;
+use App\Category;
 
-class PostController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::all();
+        return view('admin.category.index')->with('categories', $categories);
     }
 
     /**
@@ -24,7 +25,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        return view('admin.category.create');
     }
 
     /**
@@ -36,16 +37,14 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'title' => 'required|max:255', //nullable|max:255|regex:/^[a-zA-Z]+$/u
-            'featured' => 'required|image',
-            'content' => 'required'
+            'name' => 'required',
         ]);
 
-        $post = new Post();
-        
-        $post->title = $request->input('title');
-        $post->title = $request->input('title');
-        $post->title = $request->input('title');
+        $category = new Category();
+        $category->name = $request->input('name');
+        $category->save();
+
+        return redirect()->route('category');
     }
 
     /**
@@ -67,7 +66,9 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::find($id);
+
+        return view('admin.category.edit')->with('category', $category);
     }
 
     /**
@@ -79,7 +80,11 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = Category::find($id);
+        $category->name = $request->input('name');
+        $category->save();
+
+        return redirect()->route('category');
     }
 
     /**
@@ -90,6 +95,9 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+        $category->delete();
+
+        return redirect()->route('category');
     }
 }
