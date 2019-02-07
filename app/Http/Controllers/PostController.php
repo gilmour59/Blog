@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Post;
+use App\Category;
 
 class PostController extends Controller
 {
@@ -24,7 +25,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::all();
+        return view('admin.posts.create')->with('categories', $categories);
     }
 
     /**
@@ -38,14 +40,24 @@ class PostController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|max:255', //nullable|max:255|regex:/^[a-zA-Z]+$/u
             'featured' => 'required|image',
-            'content' => 'required'
+            'content' => 'required',
+            'category_id' => 'required'
         ]);
 
-        $post = new Post();
-        
-        $post->title = $request->input('title');
-        $post->title = $request->input('title');
-        $post->title = $request->input('title');
+        $featured = $request->file('featured');
+        $featured_new_name = time() . $featured->getClientOriginalName();
+        $featured->move('uploads/posts', $featured_new_name);
+
+        $post = Post::create([
+            'title' => $request->input('title'),
+            'content' => $request->input('content'),
+            'category_id' => $request->input('category_id'),
+            'featured' => 'uploads/posts/' . $featured_new_name
+        ]);
+
+        dd($post);
+
+        return redirect()->route('posts')->with('success', 'Successfully Posted!');
     }
 
     /**

@@ -44,7 +44,7 @@ class CategoryController extends Controller
         $category->name = $request->input('name');
         $category->save();
 
-        return redirect()->route('category');
+        return redirect()->route('category')->with('success', 'Successfully Stored');
     }
 
     /**
@@ -84,7 +84,7 @@ class CategoryController extends Controller
         $category->name = $request->input('name');
         $category->save();
 
-        return redirect()->route('category');
+        return redirect()->route('category')->with('success', 'Successfully Updated');
     }
 
     /**
@@ -96,8 +96,9 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::find($id);
+        $categoryName = $category->name; 
         $category->delete();
 
-        return redirect()->route('category');
+        return redirect()->route('category')->with('success', 'Successfully Deleted: ' . $categoryName);
     }
 }
