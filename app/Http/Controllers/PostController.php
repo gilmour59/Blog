@@ -26,6 +26,10 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
+
+        if($categories->count() === 0){
+            return redirect()->route('home')->with('error', 'Please have atleast one Category.');
+        }
         return view('admin.posts.create')->with('categories', $categories);
     }
 
