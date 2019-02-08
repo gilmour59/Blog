@@ -56,12 +56,11 @@ class PostController extends Controller
             'title' => $request->input('title'),
             'content' => $request->input('content'),
             'category_id' => $request->input('category_id'),
-            'featured' => 'uploads/posts/' . $featured_new_name
+            'featured' => 'uploads/posts/' . $featured_new_name,
+            'slug' => str_slug($request->input('title'))
         ]);
 
-        dd($post);
-
-        return redirect()->route('posts')->with('success', 'Successfully Posted!');
+        return redirect()->back()->with('success', 'Successfully Posted!');
     }
 
     /**
