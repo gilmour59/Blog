@@ -20,8 +20,12 @@ Auth::routes();
 Route::prefix('admin')->middleware('auth')->group(function(){
     Route::get('/home', 'HomeController@index')->name('home');
 
+    Route::get('/post', 'PostController@index')->name('post');
     Route::get('/post/create', 'PostController@create')->name('post.create');
     Route::post('/post/store', 'PostController@store')->name('post.store');
+    Route::get('/post/edit/{id}', 'PostController@edit')->name('post.edit');
+    Route::put('/post/update/{id}', 'PostController@update')->name('post.update');
+    Route::delete('/post/delete/{id}', 'PostController@destroy')->name('post.delete');
 
     Route::get('/category', 'CategoryController@index')->name('category');
     Route::get('/category/create', 'CategoryController@create')->name('category.create');
