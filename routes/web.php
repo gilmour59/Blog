@@ -26,6 +26,9 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::get('/post/edit/{id}', 'PostController@edit')->name('post.edit');
     Route::put('/post/update/{id}', 'PostController@update')->name('post.update');
     Route::delete('/post/delete/{id}', 'PostController@destroy')->name('post.delete');
+    Route::get('/post/trash', 'PostController@trash')->name('post.trash');
+    Route::get('post/restore/{id}', 'PostController@restore')->name('post.restore');
+    Route::get('post/kill/{id}', 'PostController@kill')->name('post.kill');
 
     Route::get('/category', 'CategoryController@index')->name('category');
     Route::get('/category/create', 'CategoryController@create')->name('category.create');
