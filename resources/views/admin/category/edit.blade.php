@@ -3,7 +3,7 @@
 @include('admin.includes.errors')
     <div class="card">
         <div class="card-header">
-            Create Category
+            Edit Category
         </div>
         <div class="card-body">
             <form action="{{ route('category.update', ['id' => $category->id]) }}" method="POST">

@@ -61,7 +61,7 @@ class PostController extends Controller
             'slug' => str_slug($request->input('title'))
         ]);
 
-        return redirect()->back()->with('success', 'Successfully Posted!');
+        return redirect()->route('post')->with('success', 'Successfully Posted!');
     }
 
     /**
@@ -83,7 +83,9 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::find($id);
+
+        return view('admin.posts.edit')->with('post', $post)->with('categories', Category::all());
     }
 
     /**
@@ -118,13 +120,21 @@ class PostController extends Controller
     }
 
     public function restore($id){
-        return;
+        if(($post = Post::withTrashed()->where('id', $id)->first()) !== null){
+            $post->restore();
+            
+            return redirect()->route('post.trash')->with('success', 'Post Restored: ' . $post->title);
+        }else{
+            return redirect()->route('post.trash')->with('error', 'No such Data Found!');
+        }
     }
 
     public function kill($id){
-        $post = Post::withTrashed()->where('id', $id)->first();
-        $post->forceDelete();
-        
-        return redirect()->route('post.trash')->with('success', 'Deleted Permanently: ' . $post->title);
+        if(($post = Post::withTrashed()->where('id', $id)->first()) !== null){
+            $post->forceDelete();
+            return redirect()->route('post.trash')->with('success', 'Deleted Permanently: ' . $post->title);
+        }else{
+            return redirect()->route('post.trash')->with('error', 'No such Data Found!');
+        }
     }
 }
