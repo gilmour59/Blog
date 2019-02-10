@@ -97,7 +97,29 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|max:255', //nullable|max:255|regex:/^[a-zA-Z]+$/u
+            'featured' => 'image',
+            'content' => 'required',
+            'category_id' => 'required'
+        ]);
+
+        $post = Post::find($id);
+
+        if($request->hasFile('featured')){
+            $featured = $request->file('featured');
+            $featured_new_name = time() . $featured->getClientOriginalName();
+            $featured->move('uploads/posts', $featured_new_name);
+
+            $post->featured = 'uploads/posts/' . $featured_new_name;
+        }
+
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->category_id = $request->input('category_id');
+        $post->save();
+
+        return redirect()->route('post')->with('success', 'Update Successfully!');
     }
 
     /**
