@@ -53,7 +53,7 @@ class PostController extends Controller
         $featured_new_name = time() . $featured->getClientOriginalName();
         $featured->move('uploads/posts', $featured_new_name);
 
-        $post = Post::create([
+        Post::create([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
             'category_id' => $request->input('category_id'),

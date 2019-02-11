@@ -36,4 +36,11 @@ Route::prefix('admin')->middleware('auth')->group(function(){
     Route::get('/category/edit/{id}', 'CategoryController@edit')->name('category.edit');
     Route::put('/category/update/{id}', 'CategoryController@update')->name('category.update');
     Route::delete('/category/delete/{id}', 'CategoryController@destroy')->name('category.delete');
+
+    Route::get('/tag', 'TagController@index')->name('tag');
+    Route::get('/tag/create', 'TagController@create')->name('tag.create');
+    Route::post('/tag/store', 'TagController@store')->name('tag.store');
+    Route::get('/tag/edit/{id}', 'TagController@edit')->name('tag.edit');
+    Route::put('/tag/update/{id}', 'TagController@update')->name('tag.update');
+    Route::delete('/tag/delete/{id}', 'TagController@destroy')->name('tag.delete');
 });

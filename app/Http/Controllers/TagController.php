@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Category;
+use App\Tag;
 
-class CategoryController extends Controller
+class TagController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return view('admin.categories.index')->with('categories', $categories);
+        return view('admin.tags.index')->with('tags', Tag::all());
     }
 
     /**
@@ -25,7 +24,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.categories.create');
+        return view('admin.tags.create');
     }
 
     /**
@@ -37,14 +36,14 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required',
+            'tag' => 'required',
         ]);
 
-        $category = new Category();
-        $category->name = $request->input('name');
-        $category->save();
-
-        return redirect()->route('category')->with('success', 'Successfully Stored');
+        Tag::create([
+            'tag' => $request->input('tag'),
+        ]);
+        
+        return redirect()->route('tag')->with('success', 'Tag Created Successfully!');
     }
 
     /**
@@ -66,9 +65,9 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::find($id);
+        $tag = Tag::find($id);
 
-        return view('admin.categories.edit')->with('category', $category);
+        return view('admin.tags.edit')->with('tag', $tag);
     }
 
     /**
@@ -80,11 +79,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $category = Category::find($id);
-        $category->name = $request->input('name');
-        $category->save();
+        $validatedData = $request->validate([
+            'tag' => 'required',
+        ]);
 
-        return redirect()->route('category')->with('success', 'Successfully Updated');
+        $tag = Tag::find($id);
+        $tag->tag = $request->input('tag');
+        $tag->save();
+
+        return redirect()->route('tag')->with('success', 'Tag Updated!');
     }
 
     /**
@@ -95,10 +98,8 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = Category::find($id);
-        $categoryName = $category->name; 
-        $category->delete();
+        Tag::destroy($id);
 
-        return redirect()->route('category')->with('success', 'Successfully Deleted: ' . $categoryName);
+        return redirect()->route('tag')->with('success', 'Tag Deleted!');
     }
 }
