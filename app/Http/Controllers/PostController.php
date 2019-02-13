@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Category;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -31,7 +32,7 @@ class PostController extends Controller
         if($categories->count() === 0){
             return redirect()->route('home')->with('error', 'Please have atleast one Category.');
         }
-        return view('admin.posts.create')->with('categories', $categories);
+        return view('admin.posts.create')->with('categories', $categories)->with('tags', Tag::all());
     }
 
     /**
@@ -46,20 +47,23 @@ class PostController extends Controller
             'title' => 'required|max:255', //nullable|max:255|regex:/^[a-zA-Z]+$/u
             'featured' => 'required|image',
             'content' => 'required',
-            'category_id' => 'required'
+            'category_id' => 'required',
+            'tags' => 'required',
         ]);
 
         $featured = $request->file('featured');
         $featured_new_name = time() . $featured->getClientOriginalName();
         $featured->move('uploads/posts', $featured_new_name);
 
-        Post::create([
+        $post = Post::create([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
             'category_id' => $request->input('category_id'),
             'featured' => 'uploads/posts/' . $featured_new_name,
             'slug' => str_slug($request->input('title'))
         ]);
+
+        $post->tags()->attach($request->input('tags'));
 
         return redirect()->route('post')->with('success', 'Successfully Posted!');
     }
